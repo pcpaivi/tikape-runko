@@ -1,0 +1,44 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Annos</title>
+        <meta charset="utf-8" />
+    </head>
+
+    <body>
+        <h1 th:text="${annos.nimi}">Annoksen nimi</h1>
+
+        <h2>Ohje</h2>
+        
+        <ul>
+            <li th:each="annosraaka_aine : ${annos.raaka_aineet}">
+                <form method="POST" th:action="@{~/annokset/{annos_id}/{annosraaka_aine_id}(annos_id=${annos.id}, annosraaka_aine_id=${annosraaka_aine.id})}">                
+                    <span th:text="${annosraaka_aine.raaka_aine.nimi}">Raaka-aine</span>,
+                    <span th:text="${annosraaka_aine.maara}">Määrä</span>,
+                    <span th:text="${annosraaka_aine.ohje}">Ohje</span>
+                    <input type="hidden" name="action" value="delete"/>
+                    <input type="submit" value="Poista!"/>  
+                </form>
+            </li>
+        </ul>
+        
+        <h2>Lisää raaka-aine</h2>
+        
+        <form method="POST" th:action="@{~/annokset/{id}(id=${annos.id})}">
+            <select name="raaka_aine">
+                <option th:each="raaka_aine: ${raaka_aineet}" th:value="${raaka_aine.id}" th:text="${raaka_aine.nimi}">
+                    raaka-aine
+                </option>
+            </select><br/>
+            Määrä (desimaaliluku esim. 0.2):
+            <input type="text" name="maara"/><br/>
+            Ohje:
+            <input type="text" name="ohje"/><br/>
+            <input type="hidden" name="action" value="add"/>
+            <input type="submit" value="Lisää!"/>
+        </form>
+        <p><a href="/annokset">Tästä reseptilistaukseen.</a></p>
+        <p><a href="/raaka_aineet">Tästä raaka-ainelistaukseen.</a></p>
+    </body>
+</html>
